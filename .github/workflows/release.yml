@@ -1,14 +1,22 @@
 name: Release
 
 on:
-  push:
-    branches:
-      - main
-    tags:
-      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'The current version to be released (vX.Y.Z)'
+        required: true
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}
 
 permissions:
   contents: write
+
+env:
+  GPG_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+  GPG_PASS: ${{ secrets.PASSPHRASE }}
 
 jobs:
   goreleaser:
@@ -30,8 +38,8 @@ jobs:
         uses: crazy-max/ghaction-import-gpg@01dd5d3ca463c7f10f7f4f7b4f177225ac661ee4 # v6.1.0
         id: import_gpg
         with:
-          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.PASSPHRASE }}
+          gpg_private_key: ${{ env.GPG_KEY }}
+          passphrase: ${{ env.GPG_PASS }}
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@286f3b13b1b49da4ac219696163fb8c1c93e1200 # v6.0.0
