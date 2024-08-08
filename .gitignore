@@ -23,8 +23,8 @@ website/node_modules
 .idea
 *.iml
 *.test
-*.iml
 
+archive/*.zip
 website/vendor
 
 # Test exclusions
