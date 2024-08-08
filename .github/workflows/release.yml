@@ -14,15 +14,19 @@ concurrency:
 permissions:
   contents: write
 
-env:
-  GPG_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-  GPG_PASS: ${{ secrets.PASSPHRASE }}
-
 jobs:
   goreleaser:
     name: Release
+    environment: terraform-registry
     runs-on: ubuntu-latest
     steps:
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@01dd5d3ca463c7f10f7f4f7b4f177225ac661ee4 # v6.1.0
+        id: import_gpg
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+
       - name: Check out code
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
@@ -33,13 +37,6 @@ jobs:
         with:
           go-version-file: 'go.mod'
           cache: true
-
-      - name: Import GPG key
-        uses: crazy-max/ghaction-import-gpg@01dd5d3ca463c7f10f7f4f7b4f177225ac661ee4 # v6.1.0
-        id: import_gpg
-        with:
-          gpg_private_key: ${{ env.GPG_KEY }}
-          passphrase: ${{ env.GPG_PASS }}
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@286f3b13b1b49da4ac219696163fb8c1c93e1200 # v6.0.0
