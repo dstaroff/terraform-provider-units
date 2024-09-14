@@ -1,5 +1,7 @@
-// Copyright (c) Dmitrii Starov
-// SPDX-License-Identifier: MPL-2.0
+/*
+ * Copyright (c) 2024. Dmitry Starov
+ * SPDX-License-Identifier: MPL-2.0
+ */
 
 package converter
 
@@ -30,9 +32,9 @@ var (
 	Peta = new(big.Float).Mul(Tera, Kilo)
 )
 
-type DataSizeConverter func(types.Number) types.Number
+type dataSizeConverter func(types.Number) types.Number
 
-func bytesTo(coefficient *big.Float) DataSizeConverter {
+func bytesTo(coefficient *big.Float) dataSizeConverter {
 	return func(number types.Number) types.Number {
 		if number.Equal(zero) {
 			return types.NumberValue(number.ValueBigFloat())
@@ -47,7 +49,7 @@ func bytesTo(coefficient *big.Float) DataSizeConverter {
 	}
 }
 
-func toBytes(coefficient *big.Float) DataSizeConverter {
+func toBytes(coefficient *big.Float) dataSizeConverter {
 	return func(number types.Number) types.Number {
 		if number.Equal(zero) {
 			return types.NumberValue(number.ValueBigFloat())
@@ -87,3 +89,17 @@ var (
 	TerabytesToBytes = toBytes(Tera)
 	PetabytesToBytes = toBytes(Peta)
 )
+
+var DataSizeNames = []string{
+	"bytes",
+	"kibibytes",
+	"mebibytes",
+	"gibibytes",
+	"tebibytes",
+	"pebibytes",
+	"kilobytes",
+	"megabytes",
+	"gigabytes",
+	"terabytes",
+	"petabytes",
+}
