@@ -1,3 +1,10 @@
+## v1.1.1 - 2024-09-15
+
+### Fixed
+
+* Set tag within CI.
+
+
 ## v1.1.0 - 2024-09-15
 
 ### Enhanced
