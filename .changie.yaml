@@ -7,15 +7,15 @@ kindFormat: '### {{.Kind}}'
 changeFormat: '* {{.Body}}'
 kinds:
     - label: Added
-      auto: minor
+      auto: major
     - label: Changed
       auto: major
-    - label: Enhanced
-      auto: minor
-    - label: Deprecated
-      auto: minor
     - label: Removed
       auto: major
+    - label: Deprecated
+      auto: minor
+    - label: Enhanced
+      auto: minor
     - label: Fixed
       auto: patch
     - label: Security
@@ -23,4 +23,5 @@ kinds:
 newlines:
     afterKind: 1
     beforeKind: 1
+    afterChangelogVersion: 2
     endOfVersion: 1

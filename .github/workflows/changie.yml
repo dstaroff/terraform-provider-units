@@ -1,11 +1,14 @@
-name: Changie
+name: Changelog
 
 on:
   pull_request:
+    branches:
+      - main
     paths:
       - .changes/unreleased/*.yaml
       - .changie.yaml
       - .github/workflows/changie.yml
+      - CHANGELOG.md
 
 permissions:
   contents: read
@@ -15,11 +18,18 @@ jobs:
     name: Ensure no diff
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code
+      - name: Checkout
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
-      - name: Run Changie
+      - name: Batch changes
+        continue-on-error: true
         uses: miniscruff/changie-action@6dcc2533cac0495148ed4046c438487e4dceaa23 # v2.0.0
         with:
           version: latest
-          args: batch patch --dry-run
+          args: batch auto
+
+      - name: Ensure no diff
+        # language=bash
+        run: |
+          git diff --compact-summary --exit-code || \
+            (echo "*** Unexpected diff after code generation. Run 'make generate-docs' and commit."; exit 1)

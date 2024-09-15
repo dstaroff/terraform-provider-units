@@ -19,7 +19,7 @@ lint: ## Run linting against Go code.
 ##@ Building
 
 .PHONY: build
-build: ## Build provider.
+build: generate ## Build provider.
 	go build -v ./...
 
 .PHONY: install
@@ -29,15 +29,19 @@ install: build ## Install provider.
 ##@ Testing
 
 .PHONY: test
-test: ## Run unit-tests.
+test: generate ## Run unit-tests.
 	go test -v -cover -timeout=120s -parallel=6 ./...
 
 .PHONY:test-acceptance
-test-acceptance: ## Run acceptance tests.
+test-acceptance: generate ## Run acceptance tests.
 	TF_ACC=1 go test -v -cover -timeout 120m ./...
 
 ##@ Misc
 
 .PHONY: generate
-generate: ## Format Terraform files in examples and generate docs.
+generate: ## Generate source files.
+	go generate ./internal/...
+
+.PHONY: generate-docs
+generate-docs: ## Format Terraform files in examples and generate docs.
 	cd tools && go generate ./...

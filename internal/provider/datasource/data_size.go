@@ -1,10 +1,13 @@
-// Copyright (c) Dmitrii Starov
-// SPDX-License-Identifier: MPL-2.0
+/*
+ * Copyright (c) 2024. Dmitry Starov
+ * SPDX-License-Identifier: MPL-2.0
+ */
 
 package datasource
 
 import (
 	"context"
+	"fmt"
 	"math/big"
 	"strings"
 
@@ -95,17 +98,17 @@ func (m *DataSizeModel) Convert() {
 
 	m.Bytes = bytes
 
-	m.Kibibytes = converter.BytesToKibibytes(bytes)
-	m.Mebibytes = converter.BytesToMebibytes(bytes)
-	m.Gibibytes = converter.BytesToGibibytes(bytes)
-	m.Tebibytes = converter.BytesToTebibytes(bytes)
-	m.Pebibytes = converter.BytesToPebibytes(bytes)
+	m.Kibibytes = converter.KibibytesFromBytes(bytes)
+	m.Mebibytes = converter.MebibytesFromBytes(bytes)
+	m.Gibibytes = converter.GibibytesFromBytes(bytes)
+	m.Tebibytes = converter.TebibytesFromBytes(bytes)
+	m.Pebibytes = converter.PebibytesFromBytes(bytes)
 
-	m.Kilobytes = converter.BytesToKilobytes(bytes)
-	m.Megabytes = converter.BytesToMegabytes(bytes)
-	m.Gigabytes = converter.BytesToGigabytes(bytes)
-	m.Terabytes = converter.BytesToTerabytes(bytes)
-	m.Petabytes = converter.BytesToPetabytes(bytes)
+	m.Kilobytes = converter.KilobytesFromBytes(bytes)
+	m.Megabytes = converter.MegabytesFromBytes(bytes)
+	m.Gigabytes = converter.GigabytesFromBytes(bytes)
+	m.Terabytes = converter.TerabytesFromBytes(bytes)
+	m.Petabytes = converter.PetabytesFromBytes(bytes)
 }
 
 func (d *DataSize) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -113,67 +116,21 @@ func (d *DataSize) Metadata(_ context.Context, req datasource.MetadataRequest, r
 }
 
 func (d *DataSize) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	attributes := map[string]schema.Attribute{}
+	for _, dataSizeName := range converter.DataSizeNames {
+		description := fmt.Sprintf("Data size in %s.", dataSizeName)
+		attributes[dataSizeName] = schema.NumberAttribute{
+			Description:         description,
+			MarkdownDescription: description,
+			Optional:            true,
+			Computed:            true,
+		}
+	}
+
 	resp.Schema = schema.Schema{
 		Description:         dataSizeDescription,
 		MarkdownDescription: dataSizeDescriptionMd,
-
-		Attributes: map[string]schema.Attribute{
-			"bytes": schema.NumberAttribute{
-				MarkdownDescription: "Data size in bytes.",
-				Optional:            true,
-				Computed:            true,
-			},
-			"kibibytes": schema.NumberAttribute{
-				MarkdownDescription: "Data size in kibibytes.",
-				Optional:            true,
-				Computed:            true,
-			},
-			"mebibytes": schema.NumberAttribute{
-				MarkdownDescription: "Data size in mebibytes.",
-				Optional:            true,
-				Computed:            true,
-			},
-			"gibibytes": schema.NumberAttribute{
-				MarkdownDescription: "Data size in gibibytes.",
-				Optional:            true,
-				Computed:            true,
-			},
-			"tebibytes": schema.NumberAttribute{
-				MarkdownDescription: "Data size in tebibytes.",
-				Optional:            true,
-				Computed:            true,
-			},
-			"pebibytes": schema.NumberAttribute{
-				MarkdownDescription: "Data size in pebibytes.",
-				Optional:            true,
-				Computed:            true,
-			},
-			"kilobytes": schema.NumberAttribute{
-				MarkdownDescription: "Data size in kilobytes.",
-				Optional:            true,
-				Computed:            true,
-			},
-			"megabytes": schema.NumberAttribute{
-				MarkdownDescription: "Data size in megabytes.",
-				Optional:            true,
-				Computed:            true,
-			},
-			"gigabytes": schema.NumberAttribute{
-				MarkdownDescription: "Data size in gigabytes.",
-				Optional:            true,
-				Computed:            true,
-			},
-			"terabytes": schema.NumberAttribute{
-				MarkdownDescription: "Data size in terabytes.",
-				Optional:            true,
-				Computed:            true,
-			},
-			"petabytes": schema.NumberAttribute{
-				MarkdownDescription: "Data size in petabytes.",
-				Optional:            true,
-				Computed:            true,
-			},
-		},
+		Attributes:          attributes,
 	}
 }
 
@@ -192,19 +149,14 @@ func (d *DataSize) Read(ctx context.Context, req datasource.ReadRequest, resp *d
 }
 
 func (d *DataSize) ConfigValidators(_ context.Context) []datasource.ConfigValidator {
+	var expressions []path.Expression
+	for _, dataSizeName := range converter.DataSizeNames {
+		expressions = append(expressions, path.MatchRoot(dataSizeName))
+	}
+
 	return []datasource.ConfigValidator{
 		datasourcevalidator.ExactlyOneOf(
-			path.MatchRoot("bytes"),
-			path.MatchRoot("kibibytes"),
-			path.MatchRoot("mebibytes"),
-			path.MatchRoot("gibibytes"),
-			path.MatchRoot("tebibytes"),
-			path.MatchRoot("pebibytes"),
-			path.MatchRoot("kilobytes"),
-			path.MatchRoot("megabytes"),
-			path.MatchRoot("gigabytes"),
-			path.MatchRoot("terabytes"),
-			path.MatchRoot("petabytes"),
+			expressions...,
 		),
 	}
 }

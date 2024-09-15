@@ -1,0 +1,15 @@
+{{- /*gotype: github.com/dstaroff/terraform-provider-units/internal/generator.Function*/ -}}
+{{- range $direction := .Conversion.Directions }}
+
+{{- $unitFrom := $.Conversion.Unit.Name -}}
+{{- $unitTo := "bytes" -}}
+{{- if eq $direction.Name "to" -}}
+    {{- $unitFrom = "bytes" -}}
+    {{- $unitTo = $.Conversion.Unit.Name -}}
+{{- end -}}
+
+output "example" {
+  size_in_{{ $unitTo }} = provider::units::{{ $direction.Name }}_{{ $.Conversion.Unit.Short }}(42)
+}
+
+{{- end -}}

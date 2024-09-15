@@ -1,5 +1,7 @@
-// Copyright (c) Dmitrii Starov
-// SPDX-License-Identifier: MPL-2.0
+/*
+ * Copyright (c) 2024. Dmitry Starov
+ * SPDX-License-Identifier: MPL-2.0
+ */
 
 package converter
 
