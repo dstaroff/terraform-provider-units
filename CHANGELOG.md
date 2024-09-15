@@ -1,3 +1,14 @@
+## v1.1.0 - 2024-09-15
+
+### Enhanced
+
+* Moved converter unit names to generator.
+
+### Fixed
+
+* CRLF endings.
+
+
 ## v1.0.0 - 2024-09-15
 
 ### Added
