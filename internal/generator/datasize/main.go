@@ -123,3 +123,23 @@ func (g *Generator) GenerateFunctions() (functionConstructorNames []string) {
 
 	return functionConstructorNames
 }
+
+func (g *Generator) GenerateConverterNames() {
+	data := generator.Units{
+		UnitCategory: generator.UnitCategory{
+			Title: "DataSize",
+			Name:  "data_size",
+		},
+		Names:         []string{"bytes"},
+		CopyrightInfo: g.CopyrightInfo,
+	}
+	for _, unit := range units {
+		data.Names = append(data.Names, unit.Full)
+	}
+
+	g.Generate(
+		filepath.Join(generator.PathDirConverter, fmt.Sprintf("converter_%s_names.go", data.UnitCategory.Name)),
+		filepath.Join(generator.PathDirTemplates, "converter_names.go.gotmpl"),
+		data,
+	)
+}

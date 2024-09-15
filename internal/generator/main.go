@@ -23,6 +23,7 @@ func main() {
 
 	for _, g := range generators {
 		functionConstructorNames = append(functionConstructorNames, g.GenerateFunctions()...)
+		g.GenerateConverterNames()
 	}
 
 	generator.NewBase().GenerateGeneratedFunctions(functionConstructorNames)

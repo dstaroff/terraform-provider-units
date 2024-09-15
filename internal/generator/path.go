@@ -17,6 +17,7 @@ var (
 	PathDirFunctionExamples string
 
 	PathDirInternal           string
+	PathDirConverter          string
 	PathDirProvider           string
 	PathDirDataSources        string
 	PathDirFunctions          string
@@ -42,6 +43,7 @@ func init() {
 	PathDirFunctionExamples = filepath.Join(PathDirExamples, "functions")
 
 	PathDirInternal = filepath.Join(PathDirRoot, "internal")
+	PathDirConverter = filepath.Join(PathDirInternal, "converter")
 	PathDirProvider = filepath.Join(PathDirInternal, "provider")
 	PathDirDataSources = filepath.Join(PathDirProvider, "datasource")
 	PathDirFunctions = filepath.Join(PathDirProvider, "function")
