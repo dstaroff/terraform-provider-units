@@ -89,17 +89,3 @@ var (
 	TerabytesToBytes = toBytes(Tera)
 	PetabytesToBytes = toBytes(Peta)
 )
-
-var DataSizeNames = []string{
-	"bytes",
-	"kibibytes",
-	"mebibytes",
-	"gibibytes",
-	"tebibytes",
-	"pebibytes",
-	"kilobytes",
-	"megabytes",
-	"gigabytes",
-	"terabytes",
-	"petabytes",
-}

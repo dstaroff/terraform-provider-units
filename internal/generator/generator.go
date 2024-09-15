@@ -41,10 +41,21 @@ type (
 		Names         []string
 		CopyrightInfo copyrightInfo
 	}
+
+	Units struct {
+		UnitCategory  UnitCategory
+		Names         []string
+		CopyrightInfo copyrightInfo
+	}
+	UnitCategory struct {
+		Title string
+		Name  string
+	}
 )
 
 type Generator interface {
 	GenerateFunctions() (functionConstructorNames []string)
+	GenerateConverterNames()
 }
 
 type copyrightInfo struct {
