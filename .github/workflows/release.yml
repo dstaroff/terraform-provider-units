@@ -30,10 +30,32 @@ jobs:
     outputs:
       latest: ${{ steps.latest.outputs.output }}
 
-  goreleaser:
-    name: Release ${{ needs.get-version.outputs.latest }}
+  set-tag:
+    name: Set tag
     needs:
       - get-version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        with:
+          fetch-depth: 0
+
+      - name: Set tag
+        id: set
+        uses: anothrNick/github-tag-action@777684df761b882a3f4f70db16ac70d8cc78d0ea # v1.70.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CUSTOM_TAG: ${{ needs.get-version.outputs.latest }}
+          WITH_V: true
+
+    outputs:
+      tag: ${{ steps.set.outputs.tag }}
+
+  goreleaser:
+    name: Release ${{ needs.set-tag.outputs.tag }}
+    needs:
+      - set-tag
     environment: terraform-registry
     runs-on: ubuntu-latest
     steps:
