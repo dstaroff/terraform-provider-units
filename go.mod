@@ -3,6 +3,7 @@ module github.com/dstaroff/terraform-provider-units
 go 1.21
 
 require (
+	github.com/Masterminds/goutils v1.1.1
 	github.com/hashicorp/terraform-plugin-framework v1.11.0
 	github.com/hashicorp/terraform-plugin-framework-validators v0.13.0
 	github.com/hashicorp/terraform-plugin-go v0.23.0

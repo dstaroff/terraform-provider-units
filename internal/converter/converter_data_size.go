@@ -65,11 +65,11 @@ func toBytes(coefficient *big.Float) dataSizeConverter {
 }
 
 var (
-	BytesToKibibytes = bytesTo(Kibi)
-	BytesToMebibytes = bytesTo(Mebi)
-	BytesToGibibytes = bytesTo(Gibi)
-	BytesToTebibytes = bytesTo(Tebi)
-	BytesToPebibytes = bytesTo(Pebi)
+	KibibytesFromBytes = bytesTo(Kibi)
+	MebibytesFromBytes = bytesTo(Mebi)
+	GibibytesFromBytes = bytesTo(Gibi)
+	TebibytesFromBytes = bytesTo(Tebi)
+	PebibytesFromBytes = bytesTo(Pebi)
 
 	KibibytesToBytes = toBytes(Kibi)
 	MebibytesToBytes = toBytes(Mebi)
@@ -77,11 +77,11 @@ var (
 	TebibytesToBytes = toBytes(Tebi)
 	PebibytesToBytes = toBytes(Pebi)
 
-	BytesToKilobytes = bytesTo(Kilo)
-	BytesToMegabytes = bytesTo(Mega)
-	BytesToGigabytes = bytesTo(Giga)
-	BytesToTerabytes = bytesTo(Tera)
-	BytesToPetabytes = bytesTo(Peta)
+	KilobytesFromBytes = bytesTo(Kilo)
+	MegabytesFromBytes = bytesTo(Mega)
+	GigabytesFromBytes = bytesTo(Giga)
+	TerabytesFromBytes = bytesTo(Tera)
+	PetabytesFromBytes = bytesTo(Peta)
 
 	KilobytesToBytes = toBytes(Kilo)
 	MegabytesToBytes = toBytes(Mega)

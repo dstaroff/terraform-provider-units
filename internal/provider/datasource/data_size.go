@@ -98,17 +98,17 @@ func (m *DataSizeModel) Convert() {
 
 	m.Bytes = bytes
 
-	m.Kibibytes = converter.BytesToKibibytes(bytes)
-	m.Mebibytes = converter.BytesToMebibytes(bytes)
-	m.Gibibytes = converter.BytesToGibibytes(bytes)
-	m.Tebibytes = converter.BytesToTebibytes(bytes)
-	m.Pebibytes = converter.BytesToPebibytes(bytes)
+	m.Kibibytes = converter.KibibytesFromBytes(bytes)
+	m.Mebibytes = converter.MebibytesFromBytes(bytes)
+	m.Gibibytes = converter.GibibytesFromBytes(bytes)
+	m.Tebibytes = converter.TebibytesFromBytes(bytes)
+	m.Pebibytes = converter.PebibytesFromBytes(bytes)
 
-	m.Kilobytes = converter.BytesToKilobytes(bytes)
-	m.Megabytes = converter.BytesToMegabytes(bytes)
-	m.Gigabytes = converter.BytesToGigabytes(bytes)
-	m.Terabytes = converter.BytesToTerabytes(bytes)
-	m.Petabytes = converter.BytesToPetabytes(bytes)
+	m.Kilobytes = converter.KilobytesFromBytes(bytes)
+	m.Megabytes = converter.MegabytesFromBytes(bytes)
+	m.Gigabytes = converter.GigabytesFromBytes(bytes)
+	m.Terabytes = converter.TerabytesFromBytes(bytes)
+	m.Petabytes = converter.PetabytesFromBytes(bytes)
 }
 
 func (d *DataSize) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {

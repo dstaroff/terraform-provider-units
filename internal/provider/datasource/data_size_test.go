@@ -14,7 +14,7 @@ import (
 	"github.com/dstaroff/terraform-provider-units/internal/testutils"
 )
 
-func TestAccDataSizeBase1000(t *testing.T) {
+func TestAccDataSizeDataSource_1000(t *testing.T) {
 	for _, config := range []string{
 		// language=hcl-terraform
 		`
@@ -52,7 +52,7 @@ func TestAccDataSizeBase1000(t *testing.T) {
 	}
 }
 
-func TestAccDataSizeBase1024(t *testing.T) {
+func TestAccDataSizeDataSource_1024(t *testing.T) {
 	for _, config := range []string{
 		// language=hcl-terraform
 		`
@@ -90,7 +90,7 @@ func TestAccDataSizeBase1024(t *testing.T) {
 	}
 }
 
-func TestAccDataSizeFromZero(t *testing.T) {
+func TestAccDataSizeDataSource_FromZero(t *testing.T) {
 	for _, config := range []string{
 		// language=hcl-terraform
 		`
@@ -128,7 +128,7 @@ func TestAccDataSizeFromZero(t *testing.T) {
 	}
 }
 
-func TestAccDataSizeMultipleAttributesProvided(t *testing.T) {
+func TestAccDataSizeDataSource_MultipleAttributesProvided(t *testing.T) {
 	const config =
 	// language=hcl-terraform
 	`
@@ -147,7 +147,7 @@ func TestAccDataSizeMultipleAttributesProvided(t *testing.T) {
 	})
 }
 
-func TestAccDataSizeNoAttributesProvided(t *testing.T) {
+func TestAccDataSizeDataSource_NoAttributesProvided(t *testing.T) {
 	const config =
 	// language=hcl-terraform
 	`

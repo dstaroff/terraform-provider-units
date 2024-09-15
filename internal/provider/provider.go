@@ -1,6 +1,8 @@
-// Copyright (c) HashiCorp, Inc.
-// Copyright (c) Dmitrii Starov
-// SPDX-License-Identifier: MPL-2.0
+/*
+ * Copyright (c) HashiCorp, Inc.
+ * Copyright (c) 2024. Dmitry Starov
+ * SPDX-License-Identifier: MPL-2.0
+ */
 
 package provider
 
@@ -14,6 +16,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 
 	mydatasource "github.com/dstaroff/terraform-provider-units/internal/provider/datasource"
+	myfuncs "github.com/dstaroff/terraform-provider-units/internal/provider/function"
 )
 
 var _ provider.Provider = &Units{}
@@ -27,12 +30,16 @@ type Units struct {
 	version string
 }
 
-var unitsDescription = "This provider gives a possibility to use data sources as containers for measurement units and converting them in an interoperable manner."
+var unitsDescription = `This provider gives you a possibility to convert categorized units in an interoperable manner. ` +
+	`Use data sources as containers for measurement units and converting them. ` +
+	`Or, convert them using provider-defined functions. `
 
 const unitsDescriptionMd =
 // language=markdown
 `
-This provider gives a possibility to use data sources as containers for measurement units and converting them in an interoperable manner.
+This provider gives you a possibility to convert categorized units in an interoperable manner.
+Use [data sources](https://developer.hashicorp.com/terraform/language/data-sources) as containers for measurement units and converting them.
+Or, convert them using [provider-defined functions](https://www.hashicorp.com/blog/terraform-1-8-improves-extensibility-with-provider-defined-functions).
 
 ## Problem to solve
 
@@ -42,29 +49,45 @@ This provider gives a possibility to use data sources as containers for measurem
 
 ` + "```terraform" + `
 resource "cloud_provider_disk" "this" {
-	size = var.disk_size_gib * 1024 * 1024 * 1024
+  size = var.disk_size_gib * 1024 * 1024 * 1024
 }
 
 resource "another_cloud_provider_disk" "that" {
-	size_gb = ceil((var.disk_size_gib * (1024 * 1024 * 1024)) / (1000 * 1000 * 1000))
+  size_gb = ceil((var.disk_size_gib * (1024 * 1024 * 1024)) / (1000 * 1000 * 1000))
 }
 ` + "```" + `
 
 ## Solution
 
-Simply use:
+### Data source
+
+> With data sources, you can store converted values in a container, which will be stored in your state.
 
 ` + "```terraform" + `
 data "units_data_size" "disk" {
-	gibibytes = var.disk_size_gib
+  gibibytes = var.disk_size_gib
 }
 
 resource "cloud_provider_disk" "this" {
-	size = data.units_data_size.disk.bytes
+  size = data.units_data_size.disk.bytes
 }
 
 resource "another_cloud_provider_disk" "that" {
-	size_gb = ceil(data.units_data_size.disk.gigabytes)
+  size_gb = ceil(data.units_data_size.disk.gigabytes)
+}
+` + "```" + `
+
+### Functions
+
+> Converter function results are being computed during ` + "`plan`" + `, and won't be stored in the state.
+
+` + "```terraform" + `
+resource "cloud_provider_disk" "this" {
+  size = provider::units::from_gib(var.disk_size_gib)
+}
+
+resource "another_cloud_provider_disk" "that" {
+  size_gb = ceil(provider::units::to_gb(provider::units::from_gib(var.disk_size_gib)))
 }
 ` + "```" + `
 
@@ -112,7 +135,9 @@ func (p *Units) DataSources(_ context.Context) []func() datasource.DataSource {
 }
 
 func (p *Units) Functions(_ context.Context) []func() function.Function {
-	return []func() function.Function{}
+	var res []func() function.Function
+	res = append(res, myfuncs.GeneratedFunctions...)
+	return res
 }
 
 func New(version string) func() provider.Provider {
